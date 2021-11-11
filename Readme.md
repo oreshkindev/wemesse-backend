@@ -1,5 +1,6 @@
 Логика:
 
+```bash
 Таблица app: {
 "appName"
 "appSize"
@@ -9,7 +10,9 @@
 "uploads"
 "URI" - возвращаем директорию бэкенда при посте для Сереги, а в приложение уже возвращаем ссылку на Серегу.
 }
+```
 
+```bash
 Таблица users: {
 "ID"
 "appLocale"
@@ -23,9 +26,11 @@
 "sessionRegister"
 "tgVersion"
 }
+```
 
 \*\*\* Если на бэк прилетает GET мы перманентно отправляем ему "skipped": false, чтобы он полюбому обновился.
 
+```bash
 - POST Получаем JSON с клиента {
   "appLocale"
   "appVersion"
@@ -38,7 +43,9 @@
   "sessionRegister"
   "tgVersion"
   }
+```
 
+```bash
 - Проверяем appVersion (проверяем строку из POST запроса) -> {
   "appName": "wemese.apk",
   "appSize": "0 B",
@@ -48,7 +55,9 @@
   "skipped": false,
   "URI": "https://seregin.server/release/wemese.apk"
   }
+```
 
+```bash
 <!-- GET https://messenger.tbcc.com/api/v1/updates/2264_00 -> {
   "appName": "wemese.apk",
   "appSize": "0 B",
@@ -58,3 +67,4 @@
   "skipped": false,
   "URI": "https://seregin.server/release/wemese.apk"
   } -->
+ ```
