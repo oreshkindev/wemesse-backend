@@ -1,0 +1,244 @@
+{
+	"info": {
+		"_postman_id": "4d6e35b2-8ed0-477b-8ae9-3c1e621d40a7",
+		"name": "WeMesse",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Updates",
+			"item": [
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "7adfe73ef6a8744997bdec378ffaadcd",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "signature",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/api/v1/updates/2265_01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"v1",
+								"updates",
+								"2265_01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "7adfe73ef6a8744997bdec378ffaadcd",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "signature",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "appNotes",
+									"value": "Описание",
+									"description": "Здесь инструкция",
+									"type": "text"
+								},
+								{
+									"key": "appVersion",
+									"value": "2266_00",
+									"description": "Здесь номер версии",
+									"type": "text"
+								},
+								{
+									"key": "tmpFile",
+									"description": "Здесь прикрепляем билд",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:9000/api/v1/updates",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"v1",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updates",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "7adfe73ef6a8744997bdec378ffaadcd",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "signature",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/api/v1/updates",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"v1",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "User",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "7adfe73ef6a8744997bdec378ffaadcd",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "signature",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AppLocale\": \"en\",\r\n    \"AppVersion\": \"2264_00\",\r\n    \"DeviceLocale\": \"en-us\",\r\n    \"DeviceMac\": \"2:30:54:89:2d:5w\",\r\n    \"DeviceModel\": \"OnePlusONEPLUS A6000\",\r\n    \"DeviceSDK\": \"SDK 30\",\r\n    \"SessionActivity\": 1636201,\r\n    \"SessionID\": 2,\r\n    \"SessionRegister\": 1636034599,\r\n    \"TgVersion\": \"8.1.2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "7adfe73ef6a8744997bdec378ffaadcd",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "signature",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
