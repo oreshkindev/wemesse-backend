@@ -7,7 +7,7 @@ WeMesse by TBBC messenger backend - is an independent server side application fo
 
 ## Issues
 
-If you've found a bug on a release build, in the build process or would like to have a private convo about something backend related, go ahead and [create a new issue](../../issues)!
+If you've found a bug on a release build, in the build process or would like to have a private convo about something backend related, go ahead and [create a new issue](../../../issues)!
 
 ## Releases
 
