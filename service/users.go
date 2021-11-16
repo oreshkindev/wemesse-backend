@@ -50,5 +50,5 @@ func (svc *UsersWebService) PostUser(ctx context.Context, user *model.Users) (*m
 	}
 
 	// вернем в контроллер наш результат
-	return updatesDB.UsersToWeb(), nil
+	return updatesDB, nil
 }

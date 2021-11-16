@@ -34,7 +34,7 @@ func (svc *UpdatesWebService) GetUpdate(ctx context.Context, appVersion string) 
 	}
 
 	// вернем в контроллер наш результат
-	return updatesDB.ToWeb(), nil
+	return updatesDB, nil
 }
 
 // служебный метод
