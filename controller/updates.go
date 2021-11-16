@@ -44,27 +44,21 @@ type URI struct {
 
 // получаем версию приложения с клиента
 func (ctr *UpdatesController) GetUpdate(w http.ResponseWriter, r *http.Request) {
-	// достаем подпись из заголовка запроса
-	signature := r.Header.Get("signature")
+	// ВАЖНО:
+	// не проверяем сигнатуру т.к у старых пользователей еще нет ключа
 
-	// проверяем, есть ли совпадение в бд и если есть то ...
-	if err := ctr.services.Updates.VerifySignature(ctr.ctx, signature); err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+	// достаем версию из запроса
+	appVersion := chi.URLParam(r, "version")
+
+	// передаем версию в интерфейс менеджера
+	updates, err := ctr.services.Updates.GetUpdate(ctr.ctx, appVersion)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
-	} else {
-
-		appVersion := chi.URLParam(r, "version")
-
-		// передаем версию в интерфейс менеджера
-		updates, err := ctr.services.Updates.GetUpdate(ctr.ctx, appVersion)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusNotFound)
-			return
-		}
-
-		// возвращаем json
-		render.JSON(w, r, updates)
 	}
+
+	// возвращаем json
+	render.JSON(w, r, updates)
 }
 
 // служебный метод
