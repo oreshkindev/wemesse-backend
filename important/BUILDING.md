@@ -160,16 +160,21 @@ sudo systemctl status wemesse.service
 *Start nginx service*
 ```shell
 # Create folder of web:
-sudo mkdir -p /var/www/messenger.tbcc.com/html/release/ 
+sudo mkdir -p /var/www/messenger.tbcc.com/html/source
 # Add repository and install cetbot
-sudo add-apt-repository ppa:certbot/certbot
-sudo apt install python-certbot-nginx
+sudo apt-get install python3-certbot-nginx
+sudo apt install nginx
 # Copy file 'messenger.tbcc.com' to /etc/nginx/sites-available/
 sudo nano /etc/nginx/sites-available/messenger.tbcc.com
 sudo nginx -t
 sudo systemctl reload nginx
-# Enable ufw Nginx port
+sudo ufw enable
 sudo ufw status
+# Enable ufw OpenSSH port
+sudo ufw allow '22/tcp'
+# Enable ufw Zabbix port
+sudo ufw allow '10050/tcp'
+# Enable ufw Nginx port
 sudo ufw allow 'Nginx Full'
 # Obtain an SSL Certificate
 sudo certbot --nginx -d messenger.tbcc.com
@@ -177,6 +182,29 @@ sudo certbot --nginx -d messenger.tbcc.com
 sudo certbot renew --dry-run
 ```
 
+# Errors while starting service
 
+## Using newer libc on old Linux distributions
+*/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32` not found*
+```bash
+# To check what version of glibc is installed use:
+ldd --version
+# Building glibc
+mkdir $HOME/glibc/ && cd $HOME/glibc
+wget http://ftp.gnu.org/gnu/libc/glibc-2.32.tar.gz
+tar -xvzf glibc-2.32.tar.gz
+mkdir build 
+cd build
+../configure --prefix=/opt/glibc-2.32
+make -j4
+sudo make install
+# Now you should have glibc 2.32 installed in the installation dir. check with 
+```
+This will install glibc into */opt/glibc-2.32* but if run `ldd --version` it will still report the old version.
+```bash
+# Using the new glibc
+LD_PRELOAD=/opt/glibc-2.32/lib/libc.so.6 ./main
+# Syncing the glibc timezone
 
+```
 
