@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 761.88 952.37">
+    <defs>
+        <linearGradient id="a" x1="314.53" x2="314.53" y1="659.81" y2="952.37" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#438af9" />
+            <stop offset="1" stop-color="#2d3ed5" />
+        </linearGradient>
+        <linearGradient xlink:href="#a" id="b" x1="380.94" x2="380.94" y1="0" y2="879.74" />
+        <linearGradient id="c" x1="487.38" x2="487.38" y1="364.98" y2="795.89" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-opacity=".03" />
+            <stop offset="1" stop-opacity="0" />
+        </linearGradient>
+    </defs>
+    <path fill="url(#a)" d="M248.11 952.37V659.8l132.83 219.94-132.83 72.63z" />
+    <path
+        fill="url(#b)"
+        d="M380.94 0 0 219.93V659.8l380.94 219.94L761.88 659.8V219.93Zm-100.1 482.88h-67.95V365h119.29v116.37c-1.56 40.14-15.53 66-51.34 66.51Zm222 65v-65h-68V365h119.3l.86 118.12c-1.65 41.93-19 63.6-52.18 64.76Z"
+    />
+    <path
+        fill="url(#c)"
+        d="m212.89 482.88 313.28 313L761.88 659.8v-87L554.16 365l.84 118.12c-1.88 36-13.57 62.77-52.15 64.76v-65h-68v-15.32L332.18 365v117.5c-1.69 41.15-17 65.17-51.34 65.38v-65Z"
+    />
+</svg>
