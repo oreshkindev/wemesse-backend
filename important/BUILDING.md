@@ -126,6 +126,22 @@ sudo -u postgres psql
 ALTER USER postgres PASSWORD 'postgres';
 # Create db
 CREATE DATABASE tbcc_messenger;
+
+# === Some useful commands for PSQL ===
+# Show all users
+\du
+# Show all the databases
+\list or \l
+# Show all of the psql tables
+\d or \dt
+# Choose database
+\c tbcc_messenger
+# Listing out tables using SELECT query
+select * from apps;
+# Adding a record (INSERT INTO)
+INSERT INTO middlewares VALUES('1','7adfe73ef6a8744997bdec378ffaadcd');
+# Delete one row from the table
+DELETE FROM middlewares WHERE id = 1;
 ```
 
 4. Configure reload service.

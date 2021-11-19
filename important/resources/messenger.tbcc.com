@@ -13,7 +13,8 @@ server {
 	ssl_certificate_key /etc/letsencrypt/live/messenger.tbcc.com/privkey.pem;
 	ssl_trusted_certificate /etc/letsencrypt/live/messenger.tbcc.com/fullchain.pem;	
 
-	include snippets/ssl-params.conf;    
+	access_log	/var/log/nginx/wemesse-access.log;
+	error_log	/var/log/nginx/wemesse-error.log;
 	
 	root /var/www/messenger.tbcc.com/html;
 	index index.html;    
@@ -24,10 +25,7 @@ server {
 	location / {
 	proxy_pass http://localhost:9000;
     }
-	location /release/ {
-	try_files $uri $uri/ =404;
-    }
-	location /latest/ {
+	location /source/ {
 	try_files $uri $uri/ =404;
     }
 }
