@@ -9,6 +9,7 @@ type Conf struct {
 	Port      string
 	DestURI   string
 	SourceURI string
+	Deploy    string
 	Postgres  Postgres
 }
 
@@ -29,6 +30,7 @@ func New() (*Conf, error) {
 		Port:      env("app_port", "8080"),
 		DestURI:   env("dest_uri", "http://182.92.107.179/wemesse/source/"),
 		SourceURI: env("source_uri", "https://messenger.tbcc.com/source/"),
+		Deploy:     env("path_deploy", "/var/www/messenger.tbcc.com/html/source/"),
 		Postgres: Postgres{
 			User: env("user", "postgres"),
 			Pass: env("pass", "postgres"),

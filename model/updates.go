@@ -7,7 +7,7 @@ type App struct {
 	AppChecksum string `json:"Checksum"`
 	AppName     string `json:"Name"`
 	AppNotes    string `json:"Message"`
-	AppSize     int64  `json:"Size"`
+	AppSize     string `json:"Size"`
 	AppVersion  string `json:"Version"`
 	Skipped     bool   `json:"Skipped"`
 	Uploads     int    `json:"Uploads"`

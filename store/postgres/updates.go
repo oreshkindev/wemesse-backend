@@ -11,7 +11,7 @@ type UpdatesRepo struct {
 	db *DB
 }
 
-// создаем наш непозиторий с пользователями
+// создаем наш репозиторий с пользователями
 func NewUpdatesRepo(db *DB) *UpdatesRepo {
 	return &UpdatesRepo{db: db}
 }

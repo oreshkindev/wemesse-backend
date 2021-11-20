@@ -15,16 +15,20 @@ server {
 
 	access_log	/var/log/nginx/wemesse-access.log;
 	error_log	/var/log/nginx/wemesse-error.log;
+
+	client_max_body_size 128M;
 	
 	root /var/www/messenger.tbcc.com/html;
 	index index.html;    
 
-	location /index.html {
-	try_files $uri $uri/ =404;
-    }
+	# location /index.html {
+	# try_files $uri $uri/ =404;
+    # }
+
 	location / {
 	proxy_pass http://localhost:9000;
     }
+	
 	location /source/ {
 	try_files $uri $uri/ =404;
     }

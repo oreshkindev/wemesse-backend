@@ -60,58 +60,59 @@ python3 -m venv pgadmin4
 source pgadmin4/bin/activate
 (pgadmin4) pip install pgadmin4
 (pgadmin4) sudo pgadmin4
+
+#NOTE: Configuring authentication for SERVER mode.
+#Enter the email address and password to use for the initial pgAdmin user account:
+#Email address: user@domain.com
+#Password:
+#Retype password:
+#Starting pgAdmin 4. Please navigate to http://127.0.0.1:5050 in browser.
+#* Serving Flask app "pgadmin" (lazy loading)
+#* Environment: production
+#   WARNING: Do not use the development server in a production environment.
+#   Use a production WSGI server instead.
+#* Debug mode: off
 ```
-NOTE: Configuring authentication for SERVER mode.
-Enter the email address and password to use for the initial pgAdmin user account:
-Email address: user@domain.com
-Password:
-Retype password:
-Starting pgAdmin 4. Please navigate to http://127.0.0.1:5050 in browser.
-* Serving Flask app "pgadmin" (lazy loading)
-* Environment: production
-   WARNING: Do not use the development server in a production environment.
-   Use a production WSGI server instead.
-* Debug mode: off
 
 ## Installation guide on server (Ubuntu)
 
 0. Create new linux user.
 ```shell
-groupadd wheel
-useradd wemesse -s /bin/bash -m -G wheel -c "TBCC Labs"
-passwd wemesse
+(root) groupadd wheel
+(root) useradd wemesse -s /bin/bash -m -G wheel -c "TBCC Labs"
+(root) passwd wemesse
 
+# Add user to www-data group and to set rules to upload files
+(root) usermod -a -G www-data wemesse
+(root) mkdir -p /var/www/messenger.tbcc.com/html
+(root) chown -R wemesse:www-data /var/www/messenger.tbcc.com/html
 # Set rules to new user
-nano /etc/sudoers
+(root) nano /etc/sudoers
+(root) su - wemesse
+mkdir /var/www/messenger.tbcc.com/html/source
 ```
 
 1. Change permissions to main bin file
 ```shell
-# make executable bin
+# Make executable bin
 sudo chmod u+x /{path to bin}/main
 ```
-2. Configure env.yaml
+2. Configure env.sh
 ```shell
-# Server configuration
-host: 127.0.0.1
-port: 9000
-uri: https://messenger.tbcc.com/release/
-tmp: ./tmp/
-release: /var/www/messenger.tbcc.com/html/release/
-notes: ./release-notes/
-duration: 30 # Time in seconds
-salt: 8781e03169eed720a768ce7eecfc6a21
+#!/usr/bin/bash
+#Server
+export app_host=127.0.0.1
+export app_port=9000
+export dest_uri=http://182.92.107.179/wemesse/source/
+export source_uri=https://messenger.tbcc.com/source/
+export path_deploy=/var/www/messenger.tbcc.com/html/source
 
-# Database configurations
-database:
-  user: postgres
-  pass: postgres
-  host: 127.0.0.1
-  port: 5432
-  table: tbcc_messenger
-
-# POST Downgrade 
-# curl -X POST curl -X POST http://45.77.55.28:9000/api/v1/downgrade/8781e03169eed720a768ce7eecfc6a21/[version]
+#Postgres
+export user=postgres
+export pass=postgres
+export host=127.0.0.1
+export port=5432
+export name=tbcc_messenger
 # https://messenger.tbcc.com/api/v1/updates/2264_00
 ```
 
@@ -175,8 +176,6 @@ sudo systemctl status wemesse.service
 6. Build certbot, lets'ecrypt and  nginx services.
 *Start nginx service*
 ```shell
-# Create folder of web:
-sudo mkdir -p /var/www/messenger.tbcc.com/html/source
 # Add repository and install cetbot
 sudo apt-get install python3-certbot-nginx
 sudo apt install nginx

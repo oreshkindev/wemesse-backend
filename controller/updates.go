@@ -122,7 +122,7 @@ func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request)
 
 		appNotes := r.FormValue("appNotes")
 
-		appSize := h.Size
+		appSize := util.ByteCountSI(h.Size)
 
 		appVersion := r.FormValue("appVersion")
 
@@ -138,8 +138,8 @@ func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request)
 			URI:         ctr.conf.DestURI + appName,
 		}
 
-		// создаем директорию на сервере в var/www/messenger.tbcc.com/source/
-		source, err := util.CreateDir("source", app.AppVersion)
+		// создаем директорию на сервере в /var/www/messenger.tbcc.com/source/
+		source, err := util.CreateDir(ctr.conf.Deploy, app.AppVersion)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -167,7 +167,7 @@ func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request)
 			AppSize:     updates.AppSize,
 			AppVersion:  updates.AppVersion,
 			Skipped:     updates.Skipped,
-			URI:         ctr.conf.SourceURI + appName,
+			URI:         ctr.conf.SourceURI + updates.AppVersion + "/" + appName,
 		}
 
 		// возвращаем json
