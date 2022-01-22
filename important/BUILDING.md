@@ -138,11 +138,13 @@ CREATE DATABASE tbcc_messenger;
 # Choose database
 \c tbcc_messenger
 # Listing out tables using SELECT query
-select * from apps;
+select * from table_name;
 # Adding a record (INSERT INTO)
-INSERT INTO middlewares VALUES('1','7adfe73ef6a8744997bdec378ffaadcd');
+INSERT INTO table_name VALUES('1','7adfe73ef6a8744997bdec378ffaadcd');
 # Delete one row from the table
-DELETE FROM middlewares WHERE id = 1;
+DELETE FROM table_name WHERE id = 1;
+# Delete table
+DROP TABLE table_name;
 ```
 
 4. Configure reload service.
@@ -181,8 +183,10 @@ sudo apt-get install python3-certbot-nginx
 sudo apt install nginx
 # Copy file 'messenger.tbcc.com' to /etc/nginx/sites-available/
 sudo nano /etc/nginx/sites-available/messenger.tbcc.com
+sudo ln -s /etc/nginx/sites-available/messenger.tbcc.com /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
+sudo systemctl enable nginx
 sudo ufw enable
 sudo ufw status
 # Enable ufw OpenSSH port
@@ -201,7 +205,7 @@ sudo certbot renew --dry-run
 
 ## Using newer libc on old Linux distributions
 */x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32` not found*
-```bash
+```shell
 # To check what version of glibc is installed use:
 ldd --version
 # Building glibc
@@ -216,7 +220,7 @@ sudo make install
 # Now you should have glibc 2.32 installed in the installation dir. check with 
 ```
 This will install glibc into */opt/glibc-2.32* but if run `ldd --version` it will still report the old version.
-```bash
+```shell
 # Using the new glibc
 LD_PRELOAD=/opt/glibc-2.32/lib/libc.so.6 ./main
 # Syncing the glibc timezone

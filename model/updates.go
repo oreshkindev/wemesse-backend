@@ -4,6 +4,7 @@ package model
 // определяем структуру нашего хранилища *(таблицы) и используем теги для структур для переопределения имен полей
 type App struct {
 	ID          int    `json:"Id"`
+	TargetABI   string `json:"TargetABI"`
 	AppChecksum string `json:"Checksum"`
 	AppName     string `json:"Name"`
 	AppNotes    string `json:"Message"`

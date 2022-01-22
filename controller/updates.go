@@ -49,7 +49,6 @@ func (ctr *UpdatesController) GetUpdate(w http.ResponseWriter, r *http.Request) 
 
 	// достаем версию из запроса
 	appVersion := chi.URLParam(r, "version")
-
 	// передаем версию в интерфейс менеджера
 	updates, err := ctr.services.Updates.GetUpdate(ctr.ctx, appVersion)
 	if err != nil {
@@ -118,6 +117,8 @@ func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request)
 
 		appChecksum := util.GetChecksum(f)
 
+		appTargetABI := r.FormValue("targetABI")
+
 		appName := h.Filename
 
 		appNotes := r.FormValue("appNotes")
@@ -130,6 +131,7 @@ func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request)
 
 		app := &model.App{
 			AppChecksum: appChecksum,
+			TargetABI:   appTargetABI,
 			AppName:     appName,
 			AppNotes:    appNotes,
 			AppSize:     appSize,
@@ -138,8 +140,16 @@ func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request)
 			URI:         ctr.conf.DestURI + appName,
 		}
 
-		// создаем директорию на сервере в /var/www/messenger.tbcc.com/source/
-		source, err := util.CreateDir(ctr.conf.Deploy, app.AppVersion)
+		// в зависимости от архитектуры билда создаем директорию на сервере в /var/www/messenger.tbcc.com/source/
+		target := ctr.conf.Deploy + "/" + app.TargetABI
+		_, err = os.Stat(target)
+		if os.IsNotExist(err) {
+			util.CreateDir(ctr.conf.Deploy, app.TargetABI)
+		}
+
+		// в зависимости от архитектуры билда создаем директорию для каждой версии
+		source, err := util.CreateDir(target, app.AppVersion)
+
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -162,12 +172,13 @@ func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request)
 		response := &model.App{
 			ID:          updates.ID,
 			AppChecksum: updates.AppChecksum,
+			TargetABI:   updates.TargetABI,
 			AppName:     updates.AppName,
 			AppNotes:    updates.AppNotes,
 			AppSize:     updates.AppSize,
 			AppVersion:  updates.AppVersion,
 			Skipped:     updates.Skipped,
-			URI:         ctr.conf.SourceURI + updates.AppVersion + "/" + appName,
+			URI:         ctr.conf.SourceURI + updates.TargetABI + "/" + updates.AppVersion + "/" + appName,
 		}
 
 		// возвращаем json

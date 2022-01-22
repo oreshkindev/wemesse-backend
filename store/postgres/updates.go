@@ -3,6 +3,7 @@ package postgres
 
 import (
 	"context"
+	"strings"
 	"wemesse/model"
 )
 
@@ -18,6 +19,19 @@ func NewUpdatesRepo(db *DB) *UpdatesRepo {
 
 // достаем последнюю запись с обновлением из хранилища
 func (repo *UpdatesRepo) GetUpdate(ctx context.Context, appVersion string) (*model.App, error) {
+
+	var targetABI string = ""
+
+	if len(appVersion) == 10 || len(appVersion) == 12 {
+
+		if len(appVersion) == 10 && strings.Contains(appVersion[len(appVersion)-3:], "arm") {
+			targetABI = appVersion[len(appVersion)-3:]
+		}
+		if len(appVersion) == 12 && strings.Contains(appVersion[len(appVersion)-5:], "arm64") {
+			targetABI = appVersion[len(appVersion)-5:]
+		}
+
+	}
 	// определяем структуру для объекта
 	tmp := &model.App{}
 
@@ -28,9 +42,16 @@ func (repo *UpdatesRepo) GetUpdate(ctx context.Context, appVersion string) (*mod
 		return nil, r.Error
 	}
 
-	// достаем последнюю запись из хранилища
-	if r := repo.db.Last(&prepare); r.Error != nil {
-		return nil, r.Error
+	if targetABI != "" {
+		// достаем последнюю запись архитектуры билда из хранилища
+		if r := repo.db.Last(&prepare, "target_abi", targetABI); r.Error != nil {
+			return nil, r.Error
+		}
+	} else {
+		// достаем последнюю запись из хранилища
+		if r := repo.db.Last(&prepare, "target_abi", "arm64"); r.Error != nil {
+			return nil, r.Error
+		}
 	}
 
 	if tmp.AppVersion >= appVersion {
