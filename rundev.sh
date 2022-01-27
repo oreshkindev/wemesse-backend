@@ -1,5 +1,5 @@
 #!/usr/bin/bash
 
-. ./env.sh
+. ./envdev.sh
 
 go run -race ./cmd/*.go

@@ -14,4 +14,5 @@ type Users struct {
 	SessionID       int
 	SessionRegister int
 	TgVersion       string
+	TargetABI       string
 }

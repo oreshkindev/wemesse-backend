@@ -28,9 +28,9 @@ func New() (*Conf, error) {
 		// "переменная", "дефолтное значение"
 		Host:      env("app_host", "127.0.0.1"),
 		Port:      env("app_port", "8080"),
-		DestURI:   env("dest_uri", "http://182.92.107.179/wemesse/source/"),
-		SourceURI: env("source_uri", "https://messenger.tbcc.com/source/"),
-		Deploy:     env("path_deploy", "/var/www/messenger.tbcc.com/html/source/"),
+		DestURI:   env("dest_uri", "http://182.92.107.179/wemesse/source"),
+		SourceURI: env("source_uri", "https://messenger.tbcc.com/source"),
+		Deploy:    env("path_deploy", "/var/www/messenger.tbcc.com/html/source"),
 		Postgres: Postgres{
 			User: env("user", "postgres"),
 			Pass: env("pass", "postgres"),

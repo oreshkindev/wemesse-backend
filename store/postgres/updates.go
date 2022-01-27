@@ -79,7 +79,8 @@ func (repo *UpdatesRepo) GetUpdates(ctx context.Context) ([]model.App, error) {
 }
 
 // служебный метод
-// достаем последнюю запись с обновлением из хранилища
+// сигнатура необходима для верификации клиента
+// достаем последнюю запись с сигнатурой из хранилища
 func (repo *UpdatesRepo) GetSignature(ctx context.Context, signature string) error {
 
 	var key model.Middleware
@@ -101,10 +102,10 @@ func (repo *UpdatesRepo) GetSignature(ctx context.Context, signature string) err
 func (repo *UpdatesRepo) PostUpdate(ctx context.Context, app *model.App) (*model.App, error) {
 
 	// пишем в хранилище обновление
-	if r := repo.db.Create(&app); r.Error != nil {
-		return nil, r.Error
+	if repo.db.Model(&app).Where("app_version = ? AND target_abi = ?", app.AppVersion, app.TargetABI).Updates(&app).RowsAffected == 0 {
+		repo.db.Create(&app)
 	}
 
-	// возвращаем нашего пользователя
+	// возвращаем наше обновление
 	return app, nil
 }

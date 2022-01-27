@@ -4,8 +4,6 @@ package controller
 import (
 	"context"
 	"net/http"
-	"os"
-	"path/filepath"
 	"wemesse/conf"
 	"wemesse/model"
 	"wemesse/service"
@@ -56,6 +54,8 @@ func (ctr *UpdatesController) GetUpdate(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	updates.URI = util.GenerateURI(ctr.conf.DestURI, updates.AppName)
+
 	// возвращаем json
 	render.JSON(w, r, updates)
 }
@@ -81,7 +81,7 @@ func (ctr *UpdatesController) GetUpdates(w http.ResponseWriter, r *http.Request)
 
 		// заменим значение в массиве для каждого эллемента
 		for i := range updates {
-			updates[i].URI = ctr.conf.SourceURI + updates[i].AppVersion + "/" + updates[i].AppName
+			updates[i].URI = util.GenerateURI(ctr.conf.SourceURI, updates[i].TargetABI, updates[i].AppVersion, updates[i].AppName)
 		}
 
 		// возвращаем json
@@ -92,7 +92,6 @@ func (ctr *UpdatesController) GetUpdates(w http.ResponseWriter, r *http.Request)
 // служебный метод
 // получаем приложение и описание
 func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request) {
-
 	// достаем подпись из заголовка запроса
 	signature := r.Header.Get("signature")
 
@@ -102,64 +101,53 @@ func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request)
 		return
 	} else {
 
-		// err := r.ParseMultipartForm(32 << 20)
-		// if err != nil {
-		// 	http.Error(w, "большой файл", http.StatusNoContent)
-		// }
+		// забираем файл из формы
+		f, header, err := r.FormFile("tmpFile")
+		if err != nil {
 
-		// получаем приложение из постмана
-		f, h, err := r.FormFile("tmpFile")
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		defer f.Close()
+
+		// создаем директорию на сервере /var/www/домен/source/версия/
+		dst, err := util.CreateDir(ctr.conf, r.FormValue("targetABI"), r.FormValue("appVersion"))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		defer f.Close() // закроем наш пул
+
+		// создаем локальный файл
+		err = util.CreateFile(dst, header.Filename, f)
+		if err != nil {
+
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 
 		appChecksum := util.GetChecksum(f)
 
-		appTargetABI := r.FormValue("targetABI")
-
-		appName := h.Filename
+		appName := header.Filename
 
 		appNotes := r.FormValue("appNotes")
 
-		appSize := util.ByteCountSI(h.Size)
+		appSize := util.ByteCountSI(header.Size)
 
 		appVersion := r.FormValue("appVersion")
 
 		skipped := util.GetSuffix(appVersion)
 
+		targetABI := r.FormValue("targetABI")
+
 		app := &model.App{
 			AppChecksum: appChecksum,
-			TargetABI:   appTargetABI,
 			AppName:     appName,
 			AppNotes:    appNotes,
 			AppSize:     appSize,
 			AppVersion:  appVersion,
 			Skipped:     skipped,
-			URI:         ctr.conf.DestURI + appName,
-		}
-
-		// в зависимости от архитектуры билда создаем директорию на сервере в /var/www/messenger.tbcc.com/source/
-		target := ctr.conf.Deploy + "/" + app.TargetABI
-		_, err = os.Stat(target)
-		if os.IsNotExist(err) {
-			util.CreateDir(ctr.conf.Deploy, app.TargetABI)
-		}
-
-		// в зависимости от архитектуры билда создаем директорию для каждой версии
-		source, err := util.CreateDir(target, app.AppVersion)
-
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		} else {
-			// переместим приложение в директорию на сервере
-			move, err := os.Create(filepath.Join(source, filepath.Base(app.AppName)))
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
-			defer move.Close() // закроем наш пул
+			TargetABI:   targetABI,
+			URI:         util.GenerateURI(ctr.conf.SourceURI, targetABI, appVersion, appName),
 		}
 
 		// передаем модель в интерфейс менеджера
@@ -172,13 +160,13 @@ func (ctr *UpdatesController) PostUpdate(w http.ResponseWriter, r *http.Request)
 		response := &model.App{
 			ID:          updates.ID,
 			AppChecksum: updates.AppChecksum,
-			TargetABI:   updates.TargetABI,
 			AppName:     updates.AppName,
 			AppNotes:    updates.AppNotes,
 			AppSize:     updates.AppSize,
 			AppVersion:  updates.AppVersion,
 			Skipped:     updates.Skipped,
-			URI:         ctr.conf.SourceURI + updates.TargetABI + "/" + updates.AppVersion + "/" + appName,
+			TargetABI:   updates.TargetABI,
+			URI:         util.GenerateURI(ctr.conf.SourceURI, updates.TargetABI, updates.AppVersion, updates.AppName),
 		}
 
 		// возвращаем json

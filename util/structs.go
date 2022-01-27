@@ -9,6 +9,8 @@ import (
 	"mime/multipart"
 	"os"
 	"strconv"
+	"strings"
+	"wemesse/conf"
 )
 
 // генерируем hash сумму из файла
@@ -25,14 +27,36 @@ func GetChecksum(tmp multipart.File) string {
 }
 
 // создаем директорию на сервере
-func CreateDir(source string, dir string) (string, error) {
-	dest := source + "/" + dir
-	err := os.Mkdir(dest, 0755)
+func CreateDir(conf *conf.Conf, target string, ver string) (string, error) {
+	dst := GenerateURI(conf.Deploy, target, ver)
+	err := os.MkdirAll(dst, 0644)
 	if err != nil {
 		return "", err
 	}
 
-	return dest, nil
+	return dst + "/", nil
+}
+
+// создаем директорию на сервере
+func CreateFile(src string, name string, f multipart.File) error {
+	dst, err := os.Create(src + name)
+	if err != nil {
+
+		return err
+	}
+	defer dst.Close()
+
+	// копируем данные загруженного файла во вновь созданный файл в файловой системе
+	if _, err := io.Copy(dst, f); err != nil {
+		return err
+	}
+
+	return err
+}
+
+func GenerateURI(arr ...string) string {
+
+	return strings.Join(arr, "/")
 }
 
 // Get version & suffix from file name

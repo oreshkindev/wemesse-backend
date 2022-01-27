@@ -29,7 +29,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9000/api/v1/updates/2265_01",
+							"raw": "http://localhost:9000/api/v1/updates/2267_00arm",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -39,7 +39,7 @@
 								"api",
 								"v1",
 								"updates",
-								"2265_01"
+								"2267_00arm"
 							]
 						}
 					},
@@ -76,7 +76,7 @@
 								},
 								{
 									"key": "appVersion",
-									"value": "2266_00",
+									"value": "2267_01",
 									"description": "Здесь номер версии",
 									"type": "text"
 								},
@@ -85,6 +85,11 @@
 									"description": "Здесь прикрепляем билд",
 									"type": "file",
 									"src": []
+								},
+								{
+									"key": "targetABI",
+									"value": "arm",
+									"type": "text"
 								}
 							]
 						},
@@ -179,7 +184,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"AppLocale\": \"en\",\r\n    \"AppVersion\": \"2264_00\",\r\n    \"DeviceLocale\": \"en-us\",\r\n    \"DeviceMac\": \"2:30:54:89:2d:5w\",\r\n    \"DeviceModel\": \"OnePlusONEPLUS A6000\",\r\n    \"DeviceSDK\": \"SDK 30\",\r\n    \"SessionActivity\": 1636201,\r\n    \"SessionID\": 2,\r\n    \"SessionRegister\": 1636034599,\r\n    \"TgVersion\": \"8.1.2\"\r\n}",
+							"raw": "{\r\n    \"AppLocale\": \"en\",\r\n    \"AppVersion\": \"2264_00\",\r\n    \"DeviceLocale\": \"en-us\",\r\n    \"DeviceMac\": \"2:30:54:89:2d:5w\",\r\n    \"DeviceModel\": \"OnePlusONEPLUS A6000\",\r\n    \"DeviceSDK\": \"SDK 30\",\r\n    \"SessionActivity\": 1636201,\r\n    \"SessionID\": 2,\r\n    \"SessionRegister\": 1636034599,\r\n    \"TgVersion\": \"8.1.2\",\r\n    \"TargetABI\": \"arm\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

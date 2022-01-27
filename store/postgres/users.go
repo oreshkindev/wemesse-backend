@@ -49,18 +49,18 @@ func (repo *UsersRepo) PostUser(ctx context.Context, user *model.Users) (*model.
 			return nil, r.Error
 		}
 		// обновляем кол-во скачиваний для нового пользователя или нового устройства
-		if r := repo.db.Raw("update apps set uploads = uploads + 1 where app_version = ?", user.AppVersion).Scan(&user); r.Error != nil {
+		if r := repo.db.Raw("update apps set uploads = uploads + 1 where app_version = ? AND target_abi = ?", user.AppVersion, user.TargetABI).Scan(&user); r.Error != nil {
 			return nil, r.Error
 		}
 	} else {
 		// обновляем запись в хранилище по мак адресу устройства
-		if r := repo.db.Raw("update users set app_locale = ?, app_version = ?, device_locale = ?, device_sdk = ?, session_activity = ?, session_register = ?, tg_version = ? where device_mac = ? RETURNING id", user.AppLocale, user.AppVersion, user.DeviceLocale, user.DeviceSDK, user.SessionActivity, user.SessionRegister, user.TgVersion, user.DeviceMac).Scan(&user); r.Error != nil {
+		if r := repo.db.Raw("update users set app_locale = ?, app_version = ?, device_locale = ?, device_sdk = ?, session_activity = ?, session_register = ?, tg_version = ?, target_abi = ? where device_mac = ? RETURNING id", user.AppLocale, user.AppVersion, user.DeviceLocale, user.DeviceSDK, user.SessionActivity, user.SessionRegister, user.TgVersion, user.TargetABI, user.DeviceMac).Scan(&user); r.Error != nil {
 			return nil, r.Error
 		}
 		// проверяем небыло ли у пользователя такой версии приложения ранее, и если нет, то ...
 		if user.AppVersion != prepare.AppVersion {
 			// обновляем кол-во скачиваний для нового пользователя или нового устройства
-			if r := repo.db.Raw("update apps set uploads = uploads + 1 where app_version = ? RETURNING id", user.AppVersion).Scan(&user); r.Error != nil {
+			if r := repo.db.Raw("update apps set uploads = uploads + 1 where app_version = ? AND target_abi = ? RETURNING id", user.AppVersion, user.TargetABI).Scan(&user); r.Error != nil {
 				return nil, r.Error
 			}
 		}
